@@ -8,9 +8,9 @@ const config = {
     //  Arcade physics plugin, manages physics simulation
     default: 'arcade',
     arcade: {
-      // gravity: {
-      //   y: 200
-      // }
+      gravity: {
+        y: 400
+      },
       debug: true,
     },
   },
@@ -29,22 +29,21 @@ function preload() {
 
 let bird
 const VELOCITY = 200
+let flapVelocity = 250
 
 function create() {
   this.add.image(config.width / 2, config.height / 2, 'sky');
-  // alternatively, image(0,0,'sky').setOrigin(0,0)
-
   bird = this.physics.add.sprite(config.width/10, config.height/2, 'bird').setOrigin(0);
-  bird.body.velocity.x = VELOCITY;
+
+  this.input.keyboard.on('keydown_SPACE', flap);
 }
 
 // 60fps
 function update() {
-  if(bird.x >= (config.width - bird.width)) {
-    bird.body.velocity.x = -(VELOCITY)
-  } else if(bird.x <=0) {
-    bird.body.velocity.x = VELOCITY;
-  }
+}
+
+function flap() {
+  bird.body.velocity.y = -flapVelocity;
 }
 
 
