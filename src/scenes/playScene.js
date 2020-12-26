@@ -68,8 +68,10 @@ class PlayScene extends BaseScene {
     }
 
     createScore() {
+        this.score = 0;
+        const bestScore = localStorage.getItem('bestScore');
         this.scoreText = this.add.text(16, 16, `Score: ${this.score}`, { fontSize: '32px', fill: '#000'})
-        this.bestScoreText = this.add.text(16, 48, `Best Score: ${this.bestScore}`, { fontSize: '18px', fill: '#000'})
+        this.add.text(16, 48, `Best Score: ${bestScore || 0}`, { fontSize: '18px', fill: '#000'})
     }
 
     createPauseButton() {
@@ -132,7 +134,16 @@ class PlayScene extends BaseScene {
             loop: false
         })
         
-        this.bestScore = Math.max(this.bestScore, this.score)
+        this.saveBestScore();
+    }
+
+    saveBestScore() {
+        const bestScoreText = localStorage.getItem('bestScore');
+        const bestScore = bestScoreText && parseInt(bestScoreText, 10);
+
+        if (!bestScore || this.score > bestScore) {
+            localStorage.setItem('bestScore', this.score);
+        }
     }
 
     flap() {
