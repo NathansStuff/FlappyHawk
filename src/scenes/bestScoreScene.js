@@ -1,11 +1,8 @@
 import BaseScene from './baseScene';
-import PlayScene from './playScene';
 
 class BestScoreScene extends BaseScene {
     constructor(config) {
-        super('BestScoreScene', config);
-        this.config = config;
-        this.bestScore = 0;
+        super('BestScoreScene', {...config, canGoBack: true});
     }
 
     create() {
