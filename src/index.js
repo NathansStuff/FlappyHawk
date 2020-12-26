@@ -8,9 +8,6 @@ const config = {
     //  Arcade physics plugin, manages physics simulation
     default: 'arcade',
     arcade: {
-      gravity: {
-        y: 400
-      },
       debug: true,
     },
   },
@@ -25,25 +22,42 @@ const config = {
 function preload() {
   this.load.image('sky', 'assets/sky.png')
   this.load.image('bird', 'assets/bird.png')
+  this.load.image('pipe', 'assets/pipe.png')
 }
 
 let bird
+let pipe
+let pipe2
 const VELOCITY = 200
+const birdGravity = 400
+const initialBirdPosition = {x: config.width * 0.1, y: config.height /2 }
 let flapVelocity = 250
 
 function create() {
-  this.add.image(config.width / 2, config.height / 2, 'sky');
-  bird = this.physics.add.sprite(config.width/10, config.height/2, 'bird').setOrigin(0);
+  this.add.image(0,0, 'sky').setOrigin(0,0);
+  bird = this.physics.add.sprite(initialBirdPosition.x, initialBirdPosition.y, 'bird').setOrigin(0);
+  bird.body.gravity.y = birdGravity
+  pipe = this.physics.add.sprite(300,-100, 'pipe').setOrigin(0)
+  pipe2 = this.physics.add.sprite(pipe.x, pipe.y+550, 'pipe').setOrigin(0)
 
   this.input.keyboard.on('keydown_SPACE', flap);
 }
 
 // 60fps
 function update() {
+  if(bird.y <0 || bird.y >= config.height) {
+    restartBirdPosition()
+  }
 }
 
 function flap() {
   bird.body.velocity.y = -flapVelocity;
+}
+
+function restartBirdPosition() {
+  bird.x = initialBirdPosition.x
+  bird.y = initialBirdPosition.y
+  bird.body.velocity.y = 0
 }
 
 
