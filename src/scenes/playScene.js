@@ -10,24 +10,16 @@ class PlayScene extends Phaser.Scene {
         this.bird = null;
         this.pipes = null;
         
-        this.pipeVerticalDistanceRange = [100,200]
-        this.pipeHoriontalDistance = 0
-        this.pipeHorizontalDistanceRange = [500,550]
+        this.pipeVerticalDistanceRange = [100,200];
+        this.pipeHoriontalDistance = 0;
+        this.pipeHorizontalDistanceRange = [500,550];
         
-        this.flapVelocity = 300
+        this.flapVelocity = 300;
 
         this.score = 0;
         this.scoreText = '';
         this.bestScore = 0;
         this.bestScoreText = '';
-
-    }
-
-    preload() {
-        this.load.image('sky', 'assets/sky.png')
-        this.load.image('bird', 'assets/bird.png')
-        this.load.image('pipe', 'assets/pipe.png')
-        this.load.image('pause', 'assets/pause.png')
     }
 
     create() {
