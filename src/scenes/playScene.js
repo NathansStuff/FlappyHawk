@@ -14,7 +14,12 @@ class PlayScene extends Phaser.Scene {
         this.pipeHoriontalDistance = 0
         this.pipeHorizontalDistanceRange = [500,550]
         
-        this.flapVelocity = 250
+        this.flapVelocity = 300
+
+        this.score = 0;
+        this.scoreText = '';
+        this.bestScore = 0;
+        this.bestScoreText = '';
 
     }
 
@@ -22,6 +27,7 @@ class PlayScene extends Phaser.Scene {
         this.load.image('sky', 'assets/sky.png')
         this.load.image('bird', 'assets/bird.png')
         this.load.image('pipe', 'assets/pipe.png')
+        this.load.image('pause', 'assets/pause.png')
     }
 
     create() {
@@ -29,7 +35,9 @@ class PlayScene extends Phaser.Scene {
         this.createBird();
         this.createPipes();
         this.createColliders();
+        this.createScore();
         this.handleInputs();
+        this.createPauseButton();
     }
 
     update() {
@@ -43,7 +51,7 @@ class PlayScene extends Phaser.Scene {
 
     createBird() {
         this.bird = this.physics.add.sprite(this.config.startPosition.x, this.config.startPosition.y, 'bird').setOrigin(0);
-        this.bird.body.gravity.y = 400;
+        this.bird.body.gravity.y = 600;
         this.bird.setCollideWorldBounds(true);
     }
 
@@ -66,6 +74,22 @@ class PlayScene extends Phaser.Scene {
 
     createColliders() {
         this.physics.add.collider(this.bird, this.pipes, this.gameOver, null, this);
+    }
+
+    createScore() {
+        this.scoreText = this.add.text(16, 16, `Score: ${this.score}`, { fontSize: '32px', fill: '#000'})
+        this.bestScoreText = this.add.text(16, 48, `Best Score: ${this.bestScore}`, { fontSize: '18px', fill: '#000'})
+    }
+
+    createPauseButton() {
+        const pauseButton = this.add.image(this.config.width-10,this.config.height-10, 'pause')
+            .setScale(3)
+            .setInteractive()
+            .setOrigin(1,1);
+        pauseButton.on('pointerdown', () => {
+            this.physics.pause();
+            this.scene.pause();
+        })
     }
 
     handleInputs() {
@@ -99,6 +123,7 @@ class PlayScene extends Phaser.Scene {
             tempPipes.push(pipe);
             if (tempPipes.length === 2) {
                 this.placePipe(...tempPipes);
+                this.increaseScore();
             }
             }
         })
@@ -115,6 +140,8 @@ class PlayScene extends Phaser.Scene {
             },
             loop: false
         })
+        
+        this.bestScore = Math.max(this.bestScore, this.score)
     }
 
     flap() {
@@ -128,6 +155,11 @@ class PlayScene extends Phaser.Scene {
         })
       
         return rightMostX;
+    }
+
+    increaseScore() {
+        this.score ++;
+        this.scoreText.setText(`Score: ${this.score}`)
     }
 }
 
